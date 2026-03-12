@@ -260,6 +260,13 @@ class JoltInitSettings {
     deterministicSimulation;
 
     /**
+     * Full path to the physics Web Worker JS file. Useful if you bundle it separately.
+     *
+     * @type {string}
+     */
+    dispatcherUrl;
+
+    /**
      * A fixed time intervals to update physics simulation at. Affects performance, so try to set
      * it as large as possible (fewer updates per second), until you start getting collision and
      * motion artifacts. Generally, `1/30` (30 updates per second) is a good option.

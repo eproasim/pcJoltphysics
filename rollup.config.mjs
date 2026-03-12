@@ -54,6 +54,7 @@ const jscOptsDev = {
 export default (args) => {
     const isDev = args.config_dev;
     const file = isDev ? 'dist/physics.dbg.mjs' : 'dist/physics.min.mjs';
+    const dispatcherFile = isDev ? 'dist/dispatcher.dbg.mjs' : 'dist/dispatcher.min.mjs';
     const plugins = [json(), nodeResolve()];
 
     if (isDev) {
@@ -66,14 +67,23 @@ export default (args) => {
         );
     }
 
-    return {
-        input: 'src/index.mjs',
-        output: {
-            file,
-            format: 'es',
-            sourcemap: isDev ? 'inline' : false
-        },
-        external: ['playcanvas'],
-        plugins
+    const commonOutput = {
+        format: 'es',
+        sourcemap: isDev ? 'inline' : false
     };
+
+    return [
+        {
+            input: 'src/index.mjs',
+            output: { file, ...commonOutput },
+            external: ['playcanvas'],
+            plugins
+        },
+        {
+            input: 'src/physics/dispatcher.mjs',
+            output: { file: dispatcherFile, ...commonOutput },
+            external: ['playcanvas'],
+            plugins
+        }
+    ];
 };

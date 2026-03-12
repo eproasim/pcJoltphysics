@@ -376,7 +376,8 @@ class PhysicsManager {
 
     _createDispatcher(config) {
         if (config.useWebWorker) {
-            this._dispatcher = new Worker(new URL('./dispatcher.mjs', import.meta.url));
+            const workerUrl = config.dispatcherUrl || new URL('./dispatcher.mjs', import.meta.url);
+            this._dispatcher = new Worker(workerUrl, { type: 'module' });
             this._dispatcher.onmessage = this.onMessage.bind(this);
         } else {
             this._dispatcher = new Dispatcher(this);
