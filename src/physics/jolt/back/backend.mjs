@@ -104,15 +104,21 @@ class JoltBackend {
 
         if (data.glueUrl && data.wasmUrl) {
             const loadJolt = async () => {
-                const module = await import(data.glueUrl);
-                module.default({
-                    locateFile: () => {
-                        return data.wasmUrl;
-                    }
-                }).then((Jolt) => {
-                    this.Jolt = Jolt;
-                    this.onLibLoad(Jolt, config);
-                });
+                try {
+                    const module = await import(data.glueUrl);
+                    module.default({
+                        locateFile: () => {
+                            return data.wasmUrl;
+                        }
+                    }).then((Jolt) => {
+                        this.Jolt = Jolt;
+                        this.onLibLoad(Jolt, config);
+                    }).catch(err => {
+                        console.error("Worker failed to init Jolt:", err);
+                    });
+                } catch (err) {
+                    console.error("Worker failed to import Jolt Glue:", err);
+                }
             };
             loadJolt();
         }

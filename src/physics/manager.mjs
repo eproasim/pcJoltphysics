@@ -376,9 +376,10 @@ class PhysicsManager {
 
     _createDispatcher(config) {
         if (config.useWebWorker) {
-            const workerUrl = config.dispatcherUrl || new URL('./dispatcher.mjs', import.meta.url);
+            const workerUrl = config.dispatcherUrl ? new URL(config.dispatcherUrl, import.meta.url) : new URL('./dispatcher.mjs', import.meta.url);
             this._dispatcher = new Worker(workerUrl, { type: 'module' });
             this._dispatcher.onmessage = this.onMessage.bind(this);
+            this._dispatcher.onerror = (err) => console.error('Physics Worker error:', err.message);
         } else {
             this._dispatcher = new Dispatcher(this);
         }

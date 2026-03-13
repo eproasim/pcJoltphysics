@@ -4,7 +4,14 @@ import {
     BUFFER_READ_BOOL, BUFFER_READ_FLOAT32, BUFFER_READ_INT32, BUFFER_READ_UINT16, BUFFER_READ_UINT32,
     BUFFER_READ_UINT8, CONTACT_TYPE_ADDED, CONTACT_TYPE_PERSISTED, CONTACT_TYPE_REMOVED, FLOAT32_SIZE, UINT8_SIZE
 } from '../constants.mjs';
-import { fromBuffer } from '../math.mjs';
+
+function fromBuffer(buffer) {
+    return new Vec3(
+        buffer.read(BUFFER_READ_FLOAT32),
+        buffer.read(BUFFER_READ_FLOAT32),
+        buffer.read(BUFFER_READ_FLOAT32)
+    );
+}
 
 const emptyResult = [];
 
